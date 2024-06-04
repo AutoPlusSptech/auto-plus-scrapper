@@ -171,10 +171,10 @@ def search_user(driver, user, qtdeTweets = 10):
 
     print("Driver encerrado com sucesso!")
 
-search_user(driver, "CETSP_", 20)
+    if flag_trigger:
+        analise_sentimentos.main()
+        levenshtein_g1.main()
+    else:
+        print("Flag de análise de sentimentos não acionada, encerrando programa...")
 
-if flag_trigger:
-    analise_sentimentos.main()
-    levenshtein_g1.main()
-else:
-    print("Flag de análise de sentimentos não acionada, encerrando programa...")
+search_user(driver, "CETSP_", 20)
