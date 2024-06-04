@@ -6,6 +6,14 @@ from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.support import expected_conditions as EC
 import time
 import json
+import sys
+import analise_sentimentos
+import levenshtein_g1
+
+if len(sys.argv) > 1:
+    flag_trigger = sys.argv[1]
+else:
+    flag_trigger = False 
 
 user_agent = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36'
 
@@ -159,4 +167,14 @@ def search_user(driver, user, qtdeTweets = 10):
         
     time.sleep(5)
 
+    driver.quit()
+
+    print("Driver encerrado com sucesso!")
+
 search_user(driver, "CETSP_", 20)
+
+if flag_trigger:
+    analise_sentimentos.main()
+    levenshtein_g1.main()
+else:
+    print("Flag de análise de sentimentos não acionada, encerrando programa...")

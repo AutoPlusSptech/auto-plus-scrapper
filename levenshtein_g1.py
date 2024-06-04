@@ -39,7 +39,7 @@ with open('sentimentos.csv', 'r',) as f:
         list_msgs_tweets.append(x[1])
 
 for x in list_msgs_tweets:
-    print(f"{x}\n")
+    #print(f"{x}\n")
     lista_palavras = x.split()
     indice = 0
     for i in lista_palavras:
