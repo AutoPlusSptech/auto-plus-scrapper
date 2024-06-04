@@ -24,44 +24,44 @@ def levenshtein_distance(s1, s2):
 
     return matrix[len(s1)][len(s2)]
 
-with open('palavroes.txt', 'r',) as f:
-    s1 = f.readlines()
+def main():
+    with open('palavroes.txt', 'r',) as f:
+        s1 = f.readlines()
 
-list_msgs_tweets = []
-list_msgs_tratadas = []
+    list_msgs_tweets = []
+    list_msgs_tratadas = []
 
-with open('sentimentos.csv', 'r',) as f:
-    reader = csv.reader(f, delimiter=";", quotechar='"')
+    with open('sentimentos.csv', 'r',) as f:
+        reader = csv.reader(f, delimiter=";", quotechar='"')
 
-    next(reader, None)
+        next(reader, None)
 
-    for x in reader:
-        list_msgs_tweets.append(x[1])
+        for x in reader:
+            list_msgs_tweets.append(x[1])
 
-for x in list_msgs_tweets:
-    #print(f"{x}\n")
-    lista_palavras = x.split()
-    indice = 0
-    for i in lista_palavras:
-        for y in s1:
-            res = levenshtein_distance(i.lower(), y.lower())
-            if res > 2 or len(i) <= 3:
-                continue
+    for x in list_msgs_tweets:
+        #print(f"{x}\n")
+        lista_palavras = x.split()
+        indice = 0
+        for i in lista_palavras:
+            for y in s1:
+                res = levenshtein_distance(i.lower(), y.lower())
+                if res > 2 or len(i) <= 3:
+                    continue
 
-            lista_palavras[indice] = "BADWORD"
-        indice+=1
+                lista_palavras[indice] = "BADWORD"
+            indice+=1
 
-    frase = ""
+        frase = ""
 
-    for p in lista_palavras:
-        frase += f'{p} '
+        for p in lista_palavras:
+            frase += f'{p} '
 
-    #print(frase)
+        #print(frase)
 
-    list_msgs_tratadas.append(frase)
+        list_msgs_tratadas.append(frase)
 
-
-csv_atual = pd.read_csv("sentimentos.csv", quotechar='"', sep=";")
-csv_atual["mensagem_tratada"] = list_msgs_tratadas
-csv_atual.to_csv("tweets_classificados.csv", sep=";", quotechar='"', quoting=csv.QUOTE_ALL, index=False)
-print("Arquivo de sentimento final gerado com sucesso!")
+    csv_atual = pd.read_csv("sentimentos.csv", quotechar='"', sep=";")
+    csv_atual["mensagem_tratada"] = list_msgs_tratadas
+    csv_atual.to_csv("tweets_classificados.csv", sep=";", quotechar='"', quoting=csv.QUOTE_ALL, index=False)
+    print("Arquivo de sentimento final gerado com sucesso!")

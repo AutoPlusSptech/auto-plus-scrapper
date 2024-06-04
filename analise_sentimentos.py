@@ -34,5 +34,3 @@ def main():
             writer.writerow([f"{usuario}", f"{mensagem}", f"{sentimento}"])
 
     print('\nArquivo de sentimento gerado com sucesso!')
-
-main()
