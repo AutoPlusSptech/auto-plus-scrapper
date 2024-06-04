@@ -35,22 +35,22 @@ class Scrapper:
         campoEmail = self.driver.find_element(By.XPATH, '/html/body/div/div/div/div[1]/div[2]/div/div/div/div/div/div[2]/div[2]/div/div/div[2]/div[2]/div/div/div/div[4]/label/div/div[2]/div/input')
         campoEmail.send_keys(email)
 
-        time.sleep(1)
+        time.sleep(3)
 
         avancarSenha = self.driver.find_element(By.XPATH, '/html/body/div/div/div/div[1]/div[2]/div/div/div/div/div/div[2]/div[2]/div/div/div[2]/div[2]/div/div/div/button[2]')
         avancarSenha.click()
 
-        time.sleep(1)
+        time.sleep(3)
 
         campoValidacaoBot = self.driver.find_element(By.XPATH, '//*[@id="modal-header"]/span/span')
 
         if len(campoValidacaoBot.get_attribute("innerHTML")) > 0:
             print("Bot detectado!")
-            time.sleep(1)
+            time.sleep(3)
             print("Burlando sistema...")
             campoUsuario = self.driver.find_element(By.XPATH, '/html/body/div/div/div/div[1]/div[2]/div/div/div/div/div/div[2]/div[2]/div/div/div[2]/div[2]/div[1]/div/div[2]/label/div/div[2]/div/input')
             campoUsuario.send_keys(usuario)
-            time.sleep(1)
+            time.sleep(3)
             btnAvancar = self.driver.find_element(By.XPATH, "/html/body/div/div/div/div[1]/div[2]/div/div/div/div/div/div[2]/div[2]/div/div/div[2]/div[2]/div[2]/div/div/div/button").click()
 
             print("Sistema burlado com sucesso!")
