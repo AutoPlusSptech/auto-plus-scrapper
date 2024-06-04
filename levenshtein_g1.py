@@ -49,6 +49,7 @@ def main():
                 if res > 2 or len(i) <= 3:
                     continue
 
+                print(f'Possível palavra ofensiva: {i} - Palavra comparada: {y} - Distância de Levenshtein: {res}\nTrocando palavra por BADWORD...')
                 lista_palavras[indice] = "BADWORD"
             indice+=1
 

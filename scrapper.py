@@ -27,6 +27,8 @@ class Scrapper:
     
     def login(self, email, senha, usuario):
 
+        print("Iniciando Scrapper...")
+
         self.driver.get("https://x.com/")
 
         time.sleep(3)
