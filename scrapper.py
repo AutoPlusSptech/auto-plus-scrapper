@@ -7,12 +7,14 @@ from selenium.webdriver.support import expected_conditions as EC
 import time
 import json
 
+user_agent = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36'
+
 class Scrapper:
     def __init__(self):
         self.options = webdriver.ChromeOptions()
-        self.options.add_argument('--headless')
-        self.options.add_argument('--no-sandbox')
-        self.options.add_argument('window-size=1920x1080')
+        self.options.add_argument('headless')
+        self.options.add_argument(f'user-agent={user_agent}')
+        #self.options.add_argument('window-size=1920x1080')
         self.driver = webdriver.Chrome(options=self.options)
     
     def login(self, email, senha, usuario):
@@ -104,6 +106,9 @@ def search_user(driver, user, qtdeTweets = 10):
                 #print(f'{texto}')
                 if texto in list_tweets or contador_tweets >= qtdeTweets:
                     #print("Tweet já coletado, ou limite atingido, passando para o próximo...")
+                    if contador_tweets >= qtdeTweets:
+                        print("Limite de tweets atingido!")
+                        break
                     continue
                 usuario_tweet = x.find_element(By.XPATH, f'/html/body/div[1]/div/div/div[2]/main/div/div/div/div[1]/div/div[3]/div/div/section/div/div/div[{index_x + 1}]/div/div/article/div/div/div[2]/div[2]/div[1]/div/div[1]/div/div/div[2]/div/div[1]').get_attribute("innerText")
                 #print(f'Usuário: {usuario_tweet}')
