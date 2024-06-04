@@ -27,14 +27,8 @@ def levenshtein_distance(s1, s2):
 with open('palavroes.txt', 'r',) as f:
     s1 = f.readlines()
 
-
-#s1 = ["Porra", "Foda", "Caralho", "Cuzão", "Buceta", "Puta", "Foda-se", "Merda", "Cacete", "Pau", "Arrombado"]
-
 list_msgs_tweets = []
-
 list_msgs_tratadas = []
-
-#list_msgs_tratadas.append("mensagem_tratada")
 
 with open('sentimentos.csv', 'r',) as f:
     reader = csv.reader(f, delimiter=";", quotechar='"')
@@ -62,16 +56,12 @@ for x in list_msgs_tweets:
     for p in lista_palavras:
         frase += f'{p} '
 
-    print(frase)
+    #print(frase)
 
     list_msgs_tratadas.append(frase)
-
-    print('\n\n=====================')
-
-print(f"lenght antigo: {len(list_msgs_tweets)}")
-print(f"lenght novo: {len(list_msgs_tratadas)}")
 
 
 csv_atual = pd.read_csv("sentimentos.csv", quotechar='"', sep=";")
 csv_atual["mensagem_tratada"] = list_msgs_tratadas
 csv_atual.to_csv("tweets_classificados.csv", sep=";", quotechar='"', quoting=csv.QUOTE_ALL, index=False)
+print("Arquivo de sentimento final gerado com sucesso!")

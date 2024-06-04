@@ -1,9 +1,12 @@
 from textblob import TextBlob
+from googletrans import Translator
 import csv
 import json
 
 def analisar_sentimento(texto):
-    blob = TextBlob(texto)
+    tradutor = Translator()
+    texto_en = tradutor.translate(texto, src='pt', dest='en').text
+    blob = TextBlob(texto_en)
     return blob.sentiment.polarity
 
 
@@ -16,16 +19,19 @@ def main():
 
     with open('sentimentos.csv', 'w',) as f:
             writer = csv.writer(f, delimiter=';')
-            writer.writerow(['usuario', 'mensagem', 'sentimento'])
+            writer.writerow(['usuario', 'tweet', 'sentimento'])
+
+    print('Analisando sentimento dos tweets...')
 
     for tweet in json_file:
         usuario = tweet['usuario']
-        mensagem = tweet['mensagem']
+        mensagem = tweet['tweet']
         sentimento = float(analisar_sentimento(mensagem))
-        print(f'Usuário: {usuario}\nMensagem: {mensagem}\nSentimento: {sentimento}\n')
 
         with open('sentimentos.csv', 'a') as f:
             writer = csv.writer(f, delimiter=';', quoting=csv.QUOTE_ALL)
             writer.writerow([f"{usuario}", f"{mensagem}", f"{sentimento}"])
+
+    print('\nArquivo de sentimento gerado com sucesso!')
 
 main()

@@ -62,9 +62,11 @@ class Scrapper:
         btnAvancar = self.driver.find_element(By.XPATH, '/html/body/div/div/div/div[1]/div[2]/div/div/div/div/div/div[2]/div[2]/div/div/div[2]/div[2]/div[2]/div/div[1]/div/div/button')
         btnAvancar.click()
 
+        print("Login realizado com sucesso!")
+
         time.sleep(10)
 
-        print("Login realizado com sucesso!")
+        print("Redirecionado para o usuário...")
 
         return self.driver
 
@@ -79,7 +81,10 @@ def search_user(driver, user, qtdeTweets = 10):
 
     time.sleep(8)
 
+    print(f'Coletando {qtdeTweets} tweets do usuário {user}...')
+
     list_tweets = []
+    list_tweets_json = []
     contador_tweets = 0
     texto_ultimo_tweet = ""
 
@@ -90,21 +95,30 @@ def search_user(driver, user, qtdeTweets = 10):
         section_tweets = driver.find_elements(By.XPATH, '/html/body/div[1]/div/div/div[2]/main/div/div/div/div/div/div[3]/div/div/section/div/div/div')
 
         for index_x, x in enumerate(section_tweets):
-            print(f'Index: {index_x}')
+            #print(f'Index: {index_x}')
             try:
                 texto_tweet = x.find_element(By.XPATH, f'/html/body/div[1]/div/div/div[2]/main/div/div/div/div/div/div[3]/div/div/section/div/div/div[{index_x + 1}]/div/div/article/div/div/div[2]/div[2]/div[2]/div')
                 texto_raw = texto_tweet.get_attribute("innerText")
                 texto = texto_raw.replace("\n", "")
-                print(f'{texto}')
+                #print(f'{texto}')
                 if texto in list_tweets or contador_tweets >= qtdeTweets:
-                    print("Tweet já coletado, ou limite atingido, passando para o próximo...")
+                    #print("Tweet já coletado, ou limite atingido, passando para o próximo...")
                     continue
+                usuario_tweet = x.find_element(By.XPATH, f'/html/body/div[1]/div/div/div[2]/main/div/div/div/div[1]/div/div[3]/div/div/section/div/div/div[{index_x + 1}]/div/div/article/div/div/div[2]/div[2]/div[1]/div/div[1]/div/div/div[2]/div/div[1]').get_attribute("innerText")
+                #print(f'Usuário: {usuario_tweet}')
                 list_tweets.append(texto)
+                tweet_json = {
+                    "usuario": usuario_tweet,
+                    "tweet": texto
+                }
+                list_tweets_json.append(tweet_json)
                 contador_tweets += 1
                 texto_ultimo_tweet = texto
             except:
-                print("Erro ao coletar tweet, passando para o próximo...")
+                #print("Erro ao coletar tweet, passando para o próximo...")
                 continue
+
+            time.sleep(0.5)
 
         if contador_tweets < qtdeTweets:
             print("Quantidade de tweets menor que a quantidade solicitada! descendo a página...")
@@ -112,9 +126,11 @@ def search_user(driver, user, qtdeTweets = 10):
             time.sleep(5)
 
             try:
-                inicial_atual = driver.find_element(By.XPATH, '/html/body/div[1]/div/div/div[2]/main/div/div/div/div/div/div[3]/div/div/section/div/div/div[1]/div/div/article/div/div/div[2]/div[2]/div[2]/div').get_attribute("innerText").replace("\n", "")
+                inicial_atual = driver.find_element(By.XPATH, '/html/body/div[1]/div/div/div[2]/main/div/div/div/div[1]/div/div[3]/div/div/section/div/div/div[1]/div/div/article/div/div/div[2]/div[2]/div[2]').get_attribute("innerText").replace("\n", "")
+                #print(f'Teste inicial atual {inicial_atual}')
             except:
-                print("Erro ao coletar tweet inicial atual!")
+                #print("Erro ao coletar tweet inicial atual!")
+                driver.execute_script("window.scrollBy(0, 300);")
                 inicial_atual = ""
                 continue
 
@@ -124,7 +140,7 @@ def search_user(driver, user, qtdeTweets = 10):
                 try:
                     inicial_atual = driver.find_element(By.XPATH, '/html/body/div[1]/div/div/div[2]/main/div/div/div/div/div/div[3]/div/div/section/div/div/div[1]/div/div/article/div/div/div[2]/div[2]/div[2]/div').get_attribute("innerText").replace("\n", "")
                 except:
-                    print("Erro ao coletar tweet inicial atual!")
+                    #print("Erro ao coletar tweet inicial atual!")
                     inicial_atual = ""
                     continue
 
@@ -132,13 +148,9 @@ def search_user(driver, user, qtdeTweets = 10):
 
     print(f'Quantidade de tweets coletados: {len(list_tweets)}')
 
-    for tweet in list_tweets:
-        print(tweet)
-
-
-    with open('tweets.json', 'w', encoding='utf-8') as file:
-        json.dump(list_tweets, file, ensure_ascii=False)
+    with open('tweets.json', 'w') as file:
+        json.dump(list_tweets_json, file, ensure_ascii=False, indent=4)
         
     time.sleep(5)
 
-search_user(driver, "gaules", 20)
+search_user(driver, "CETSP_", 20)

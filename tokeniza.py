@@ -123,3 +123,6 @@ def tokeniza(exp):
     
     
     return tokens
+
+
+print(tokeniza("a = 2 + 3 * 4 # isto e um comentario"))
