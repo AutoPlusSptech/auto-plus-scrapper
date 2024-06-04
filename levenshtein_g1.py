@@ -1,6 +1,8 @@
 import csv
 import json
 import pandas as pd
+import boto3
+import datetime
 
 def levenshtein_distance(s1, s2):
 
@@ -65,4 +67,11 @@ def main():
     csv_atual = pd.read_csv("sentimentos.csv", quotechar='"', sep=";")
     csv_atual["mensagem_tratada"] = list_msgs_tratadas
     csv_atual.to_csv("tweets_classificados.csv", sep=";", quotechar='"', quoting=csv.QUOTE_ALL, index=False)
-    print("Arquivo de sentimento final gerado com sucesso!")
+    print("Arquivo de sentimento final gerado com sucesso!\nIniciando upload para o S3...")
+
+    data_atual = datetime.datetime.now().strftime("%d-%m-%Y")
+
+    s3 = boto3.client('s3', region_name='us-east-1')
+    s3.upload_file("tweets_classificados.csv", "3cco-autoplus-mq-bucket-raw", f"data/scrapper/{data_atual}/tweets_classificados.csv")
+
+    print("Upload para o S3 realizado com sucesso!")

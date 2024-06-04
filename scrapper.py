@@ -171,7 +171,7 @@ def search_user(driver, user, qtdeTweets = 10):
 
     driver.quit()
 
-    print("Driver encerrado com sucesso!")
+    print("Scrapper encerrado com sucesso!")
 
     if flag_trigger:
         analise_sentimentos.main()
