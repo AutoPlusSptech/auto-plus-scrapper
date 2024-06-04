@@ -1,11 +1,12 @@
 from textblob import TextBlob
-from googletrans import Translator
+#from googletrans import Translator
+from deep_translator import GoogleTranslator as Translator
 import csv
 import json
 
 def analisar_sentimento(texto):
-    tradutor = Translator()
-    texto_en = tradutor.translate(texto, src='pt', dest='en').text
+    tradutor = Translator(source= "pt", target= "en")
+    texto_en = tradutor.translate(texto)
     blob = TextBlob(texto_en)
     return blob.sentiment.polarity
 
