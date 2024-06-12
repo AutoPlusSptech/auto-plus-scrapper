@@ -57,13 +57,13 @@ class Scrapper:
         if len(campoValidacaoBot.get_attribute("innerHTML")) > 0:
             print("Bot detectado!")
             time.sleep(3)
-            print("Burlando sistema...")
+            print("Contornando sistema...")
             campoUsuario = self.driver.find_element(By.XPATH, '/html/body/div/div/div/div[1]/div[2]/div/div/div/div/div/div[2]/div[2]/div/div/div[2]/div[2]/div[1]/div/div[2]/label/div/div[2]/div/input')
             campoUsuario.send_keys(usuario)
             time.sleep(3)
             btnAvancar = self.driver.find_element(By.XPATH, "/html/body/div/div/div/div[1]/div[2]/div/div/div/div/div/div[2]/div[2]/div/div/div[2]/div[2]/div[2]/div/div/div/button").click()
 
-            print("Sistema burlado com sucesso!")
+            print("Sistema contornado com sucesso!")
 
             time.sleep(2)
 
@@ -129,14 +129,16 @@ def search_user(driver, user, qtdeTweets = 10):
                 }
                 list_tweets_json.append(tweet_json)
                 contador_tweets += 1
+                print(f'Tweet coletado: {texto}')
                 texto_ultimo_tweet = texto
             except:
                 #print("Erro ao coletar tweet, passando para o próximo...")
                 continue
 
-            time.sleep(0.5)
+            time.sleep(1)
 
         if contador_tweets < qtdeTweets:
+            print(f"Quantidade de tweets coletados: {contador_tweets} | Quantidade solicitada: {qtdeTweets}")
             print("Quantidade de tweets menor que a quantidade solicitada! descendo a página...")
 
             time.sleep(5)
@@ -150,17 +152,20 @@ def search_user(driver, user, qtdeTweets = 10):
                 inicial_atual = ""
                 continue
 
+            #print(f'Tweet a ser encontrado: {texto_ultimo_tweet}')
+
             while texto_ultimo_tweet != inicial_atual:
-                driver.execute_script("window.scrollBy(0, 200);")
+                driver.execute_script("window.scrollBy(0, 350);")
 
                 try:
-                    inicial_atual = driver.find_element(By.XPATH, '/html/body/div[1]/div/div/div[2]/main/div/div/div/div/div/div[3]/div/div/section/div/div/div[1]/div/div/article/div/div/div[2]/div[2]/div[2]/div').get_attribute("innerText").replace("\n", "")
+                    inicial_atual = driver.find_element(By.XPATH, '/html/body/div[1]/div/div/div[2]/main/div/div/div/div/div/div[3]/div/div/section/div/div/div[1]/div/div/article/div/div/div[2]/div[2]/div[2]').get_attribute("innerText").replace("\n", "")
+                    #print(f'Teste inicial atual {inicial_atual}')
                 except:
                     #print("Erro ao coletar tweet inicial atual!")
                     inicial_atual = ""
                     continue
 
-                time.sleep(1)
+                time.sleep(0.5)
 
     print(f'Quantidade de tweets coletados: {len(list_tweets)}')
 
@@ -179,4 +184,4 @@ def search_user(driver, user, qtdeTweets = 10):
     else:
         print("Flag de análise de sentimentos não acionada, encerrando programa...")
 
-search_user(driver, "CETSP_", 20)
+search_user(driver, "_ecovias", 18)
